@@ -8,49 +8,48 @@ seen = set()
 
 
 while True:
-    r = requests.get("https://www.janestreet.com/jobs/main.json")
-    data = json.loads(r.text)
+    try:
+        r = requests.get("https://www.janestreet.com/jobs/main.json")
+        data = json.loads(r.text)
+    except:
+        print("request failed")
+        time.sleep(60)
+        continue
 
     for job in data:
-        if ("Internship" in job["availability"] or "internship" in job["availability"] or "Full-Time: New Grad" in job["availability"]) and job["id"] not in seen:
+        if (
+            "Internship" in job["availability"]
+            or "internship" in job["availability"]
+            or "Full-Time: New Grad" in job["availability"]
+        ) and job["id"] not in seen:
 
             embed = {
-            "title": "job found plz apply",
-            "description": "i found new job for u",
-            "color": 0xFF0000,
-            "fields": [
-                {
-                    "name": "job title",
-                    "value": job['position'],
-                    "inline": True
-                },
-                {
-                    "name": "term",
-                    "value": job["availability"],
-                    "inline": True
-                },
-                {
-                    "name": "link",
-                    "value": f"{base_url}{job['id']}",
-                    "inline": True
-                },
-            ]
+                "title": "job found plz apply",
+                "description": "i found new job for u",
+                "color": 0xFF0000,
+                "fields": [
+                    {"name": "job title", "value": job["position"], "inline": True},
+                    {"name": "term", "value": job["availability"], "inline": True},
+                    {"name": "link", "value": f"{base_url}{job['id']}", "inline": True},
+                ],
             }
-            
+
             message = {
                 "username": "employment bot",
                 "content": "<@&1247731582450794607>",
-                "embeds": [embed]
+                "embeds": [embed],
             }
 
-            headers = {
-            "Content-Type": "application/json"
-            }
+            headers = {"Content-Type": "application/json"}
 
             payload = json.dumps(message)
 
-            temp = requests.post(webhook, headers=headers, data=payload)
-            print(job["id"], job["position"], temp.status_code)
+            try:
+                temp = requests.post(webhook, headers=headers, data=payload)
+                print(job["id"], job["position"], temp.status_code)
+            except:
+                print("webhook failed to send")
+                continue
 
             seen.add(job["id"])
 
