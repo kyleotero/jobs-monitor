@@ -4,6 +4,7 @@ from utils import send_webhook, database, read_mongo, write_mongo
 
 base_url = "https://www.janestreet.com/join-jane-street/position/"
 js_collection = database["janestreet"]
+keywords = ["Internship", "internship", "New Grad", "new grad"]
 
 
 def janestreet_monitor():
@@ -15,10 +16,8 @@ def janestreet_monitor():
         return
 
     for job in data:
-        if (
-            "Internship" in job["availability"]
-            or "internship" in job["availability"]
-            or "Full-Time: New Grad" in job["availability"]
+        if any(
+            keyword in job["availability"] for keyword in keywords
         ) and not read_mongo(js_collection, job["id"]):
             send_webhook(
                 "jane street",

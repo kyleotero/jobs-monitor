@@ -23,7 +23,7 @@ database = get_database()
 def send_webhook(company, title, url, term):
     embed = {
         "title": "job found plz apply",
-        "description": "i found new job for u",
+        "description": company,
         "color": 0xFF0000,
         "fields": [
             {"name": "job title", "value": title, "inline": True},
