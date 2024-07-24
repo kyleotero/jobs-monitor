@@ -10,7 +10,6 @@ keywords = [
     "new grad",
     "Co-op",
     "co-op",
-    "Crypto",
 ]
 
 
