@@ -20,14 +20,14 @@ def get_database():
 database = get_database()
 
 
-def send_webhook(company, title, url, term):
+def send_webhook(company, title, url, type):
     embed = {
         "title": "job found plz apply",
         "description": company,
         "color": 0xFF0000,
         "fields": [
             {"name": "job title", "value": title, "inline": True},
-            {"name": "term", "value": term, "inline": True},
+            {"name": "type", "value": type, "inline": True},
             {"name": "link", "value": url, "inline": True},
         ],
     }
@@ -37,6 +37,9 @@ def send_webhook(company, title, url, term):
         "content": "<@&1247731582450794607>",
         "embeds": [embed],
     }
+
+    if company == "roblox":
+        message["content"] = "<@&1247731582450794607> <@&1265702582014316684>"
 
     headers = {"Content-Type": "application/json"}
 

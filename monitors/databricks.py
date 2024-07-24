@@ -24,6 +24,9 @@ def databricks_monitor():
             data = dept["jobs"]
             break
 
+    if data is None:
+        return
+
     for job in data:
         if any(keyword in job["title"] for keyword in keywords) and not read_mongo(
             databricks_collection, job["gh_Id"]
