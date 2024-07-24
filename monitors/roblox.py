@@ -2,8 +2,15 @@ import requests
 import json
 from utils import send_webhook, database, read_mongo, write_mongo
 
-roblox_collection = database["janestreet"]
-keywords = ["Internship", "internship", "New Grad", "new grad"]
+roblox_collection = database["roblox"]
+keywords = [
+    "Internship",
+    "internship",
+    "New Grad",
+    "new grad",
+    "Co-op",
+    "co-op",
+]
 
 
 def roblox_monitor():

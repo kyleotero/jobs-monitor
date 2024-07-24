@@ -4,7 +4,14 @@ from utils import send_webhook, database, read_mongo, write_mongo
 
 base_url = "https://www.janestreet.com/join-jane-street/position/"
 js_collection = database["janestreet"]
-keywords = ["Internship", "internship", "New Grad", "new grad"]
+keywords = [
+    "Internship",
+    "internship",
+    "New Grad",
+    "new grad",
+    "Co-op",
+    "co-op",
+]
 
 
 def janestreet_monitor():
