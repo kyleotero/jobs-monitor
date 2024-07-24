@@ -4,6 +4,7 @@ from monitors.databricks import databricks_monitor
 from monitors.ramp import ramp_monitor
 from monitors.modal import modal_monitor
 from monitors.figma import figma_monitor
+from monitors.robinhood import robinhood_monitor
 import time
 
 while True:
@@ -13,5 +14,6 @@ while True:
     ramp_monitor()
     modal_monitor()
     figma_monitor()
+    robinhood_monitor()
 
     time.sleep(60)
