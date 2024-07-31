@@ -11,24 +11,34 @@ keywords = [
     "Co-op",
     "co-op",
 ]
+query = {
+    "operationName": "ApiJobBoardWithTeams",
+    "variables": {"organizationHostedJobsPageName": "ramp"},
+    "query": "query ApiJobBoardWithTeams($organizationHostedJobsPageName: String!) {\n  jobBoard: jobBoardWithTeams(\n    organizationHostedJobsPageName: $organizationHostedJobsPageName\n  ) {\n  jobPostings {\n      id\n      title\n      teamId\n      locationId\n      locationName\n      employmentType\n      secondaryLocations {\n        ...JobPostingSecondaryLocationParts\n        __typename\n      }\n      compensationTierSummary\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment JobPostingSecondaryLocationParts on JobPostingSecondaryLocation {\n  locationId\n  locationName\n  __typename\n}",
+}
+base_url = "https://jobs.ashbyhq.com/ramp/"
 
 
 def ramp_monitor():
     try:
-        r = requests.get("https://api.ashbyhq.com/posting-api/job-board/ramp")
-        data = json.loads(r.text)["jobs"]
+        r = requests.post(
+            "https://jobs.ashbyhq.com/api/non-user-graphql?op=ApiJobBoardWithTeams",
+            json=query,
+        )
+        data = json.loads(r.text)["data"]["jobBoard"]["jobPostings"]
     except:
-        print("Ramp: request failed")
+        print("Ramp: request failed", r.text)
         return
 
     for job in data:
-        if any(keyword in job["title"] for keyword in keywords) and not read_mongo(
-            ramp_collection, job["id"]
-        ):
+        if (
+            any(keyword in job["title"] for keyword in keywords)
+            or any(keyword in job["employmentType"] for keyword in keywords)
+        ) and not read_mongo(ramp_collection, job["id"]):
             send_webhook(
                 "ramp",
                 job["title"],
-                job["jobUrl"],
+                base_url + job["id"],
                 job["employmentType"],
             )
 
