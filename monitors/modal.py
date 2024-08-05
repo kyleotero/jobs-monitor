@@ -1,16 +1,8 @@
 import requests
 import json
-from utils import send_webhook, database, read_mongo, write_mongo
+from utils import send_webhook, database, read_mongo, write_mongo, keywords
 
 modal_collection = database["modal"]
-keywords = [
-    "Internship",
-    "internship",
-    "New Grad",
-    "new grad",
-    "Co-op",
-    "co-op",
-]
 
 
 def modal_monitor():
@@ -22,9 +14,9 @@ def modal_monitor():
         return
 
     for job in data:
-        if any(keyword in job["title"] for keyword in keywords) and not read_mongo(
-            modal_collection, job["id"]
-        ):
+        if any(
+            keyword in job["title"].split() for keyword in keywords
+        ) and not read_mongo(modal_collection, job["id"]):
             send_webhook(
                 "modal",
                 job["title"],

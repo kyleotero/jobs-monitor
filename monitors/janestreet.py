@@ -1,17 +1,9 @@
 import requests
 import json
-from utils import send_webhook, database, read_mongo, write_mongo
+from utils import send_webhook, database, read_mongo, write_mongo, keywords
 
 base_url = "https://www.janestreet.com/join-jane-street/position/"
 js_collection = database["janestreet"]
-keywords = [
-    "Internship",
-    "internship",
-    "New Grad",
-    "new grad",
-    "Co-op",
-    "co-op",
-]
 
 
 def janestreet_monitor():
@@ -24,7 +16,7 @@ def janestreet_monitor():
 
     for job in data:
         if any(
-            keyword in job["availability"] for keyword in keywords
+            keyword in job["availability"].split() for keyword in keywords
         ) and not read_mongo(js_collection, job["id"]):
             send_webhook(
                 "jane street",

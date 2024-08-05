@@ -1,16 +1,8 @@
 import requests
 import json
-from utils import send_webhook, database, read_mongo, write_mongo
+from utils import send_webhook, database, read_mongo, write_mongo, keywords
 
 figma_collection = database["figma"]
-keywords = [
-    "Internship",
-    "internship",
-    "New Grad",
-    "new grad",
-    "Co-op",
-    "co-op",
-]
 
 
 def figma_monitor():
@@ -24,9 +16,9 @@ def figma_monitor():
         return
 
     for job in data:
-        if any(keyword in job["title"] for keyword in keywords) and not read_mongo(
-            figma_collection, job["id"]
-        ):
+        if any(
+            keyword in job["title"].split() for keyword in keywords
+        ) and not read_mongo(figma_collection, job["id"]):
             send_webhook(
                 "figma",
                 job["title"],

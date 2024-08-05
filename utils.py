@@ -7,6 +7,17 @@ from pymongo.server_api import ServerApi
 
 load_dotenv()
 
+keywords = [
+    "Internship",
+    "internship",
+    "Intern",
+    "intern",
+    "New Grad",
+    "new grad",
+    "Co-op",
+    "co-op",
+]
+
 webhook = os.getenv("webhook")
 
 

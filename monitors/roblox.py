@@ -1,16 +1,8 @@
 import requests
 import json
-from utils import send_webhook, database, read_mongo, write_mongo
+from utils import send_webhook, database, read_mongo, write_mongo, keywords
 
 roblox_collection = database["roblox"]
-keywords = [
-    "Internship",
-    "internship",
-    "New Grad",
-    "new grad",
-    "Co-op",
-    "co-op",
-]
 
 
 def roblox_monitor():
@@ -25,8 +17,8 @@ def roblox_monitor():
 
     for job in data:
         if (
-            any(keyword in job["metadata"][0]["value"] for keyword in keywords)
-            or any(keyword in job["title"] for keyword in keywords)
+            any(keyword in job["metadata"][0]["value"].split() for keyword in keywords)
+            or any(keyword in job["title"].split() for keyword in keywords)
             and not read_mongo(roblox_collection, job["internal_job_id"])
         ):
             send_webhook(

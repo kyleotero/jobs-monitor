@@ -16,7 +16,7 @@ while True:
         modal_monitor()
         figma_monitor()
         robinhood_monitor()
-    except:
-        print("Error in main.py")
+    except Exception as e:
+        print("Error in main.py", e)
 
     time.sleep(60)

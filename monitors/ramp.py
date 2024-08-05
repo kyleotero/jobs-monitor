@@ -1,16 +1,8 @@
 import requests
 import json
-from utils import send_webhook, database, read_mongo, write_mongo
+from utils import send_webhook, database, read_mongo, write_mongo, keywords
 
 ramp_collection = database["ramp"]
-keywords = [
-    "Internship",
-    "internship",
-    "New Grad",
-    "new grad",
-    "Co-op",
-    "co-op",
-]
 query = {
     "operationName": "ApiJobBoardWithTeams",
     "variables": {"organizationHostedJobsPageName": "ramp"},
@@ -32,8 +24,8 @@ def ramp_monitor():
 
     for job in data:
         if (
-            any(keyword in job["title"] for keyword in keywords)
-            or any(keyword in job["employmentType"] for keyword in keywords)
+            any(keyword in job["title"].split() for keyword in keywords)
+            or any(keyword in job["employmentType"].split() for keyword in keywords)
         ) and not read_mongo(ramp_collection, job["id"]):
             send_webhook(
                 "ramp",

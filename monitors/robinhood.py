@@ -1,16 +1,8 @@
 import requests
 import json
-from utils import send_webhook, database, read_mongo, write_mongo
+from utils import send_webhook, database, read_mongo, write_mongo, keywords
 
 robinhood_collection = database["robinhood"]
-keywords = [
-    "Internship",
-    "internship",
-    "New Grad",
-    "new grad",
-    "Co-op",
-    "co-op",
-]
 
 
 def robinhood_monitor():
@@ -22,9 +14,9 @@ def robinhood_monitor():
         return
 
     for job in data:
-        if any(keyword in job["title"] for keyword in keywords) and not read_mongo(
-            robinhood_collection, job["id"]
-        ):
+        if any(
+            keyword in job["title"].split() for keyword in keywords
+        ) and not read_mongo(robinhood_collection, job["id"]):
             send_webhook(
                 "robinhood",
                 job["title"],

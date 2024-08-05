@@ -7,6 +7,8 @@ databricks_collection = database["databricks"]
 keywords = [
     "Internship",
     "internship",
+    "Intern",
+    "intern",
     "New Grad",
     "new grad",
     "Co-op",
@@ -35,9 +37,9 @@ def databricks_monitor():
         return
 
     for job in data:
-        if any(keyword in job["title"] for keyword in keywords) and not read_mongo(
-            databricks_collection, job["gh_Id"]
-        ):
+        if any(
+            keyword in job["title"].split() for keyword in keywords
+        ) and not read_mongo(databricks_collection, job["gh_Id"]):
             send_webhook(
                 "databricks",
                 job["title"],
