@@ -8,12 +8,15 @@ from monitors.robinhood import robinhood_monitor
 import time
 
 while True:
-    janestreet_monitor()
-    roblox_monitor()
-    databricks_monitor()
-    ramp_monitor()
-    modal_monitor()
-    figma_monitor()
-    robinhood_monitor()
+    try:
+        janestreet_monitor()
+        roblox_monitor()
+        databricks_monitor()
+        ramp_monitor()
+        modal_monitor()
+        figma_monitor()
+        robinhood_monitor()
+    except:
+        print("Error in main.py")
 
     time.sleep(60)
