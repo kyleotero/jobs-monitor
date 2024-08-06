@@ -19,8 +19,7 @@ def roblox_monitor():
         if (
             any(keyword in job["metadata"][0]["value"].split() for keyword in keywords)
             or any(keyword in job["title"].split() for keyword in keywords)
-            and not read_mongo(roblox_collection, job["internal_job_id"])
-        ):
+        ) and not read_mongo(roblox_collection, job["internal_job_id"]):
             send_webhook(
                 "roblox",
                 job["title"],
